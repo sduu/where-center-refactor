@@ -1,4 +1,5 @@
 import { css } from 'styled-components';
+import { BREAKPOINT } from '../constants/styles.constant';
 
 export const oneLineEllipsis = css`
   white-space: nowrap;
@@ -12,4 +13,8 @@ export const multiLineEllipsis = css`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+`;
+
+export const smLayout = `
+  @media screen and (max-width: ${BREAKPOINT.sm})
 `;
