@@ -6,8 +6,8 @@ export const FONTSIZE = {
 } as const;
 
 export const BREAKPOINT = {
-  lg: '192rem',
-  sm: '78rem',
+  lg: '1920px',
+  sm: '780px',
 } as const;
 
 export const GAP = {
@@ -27,9 +27,14 @@ export const COLOR = {
   backgroundSection: '#fff',
   textMain: '#111827',
   textSub: '#6b7280',
-  border: '#f1f1f1',
+  placeholder: '#adadad',
+  border: '#bdbdbd',
   primary: '#30a2ff',
   secondary: '#00c4ff',
   tertiary: '#ffe7a0',
   quaternary: '#FFF5B8',
 } as const;
+
+export const ANIMATION_DURATION = {
+  modal: 500,
+};
