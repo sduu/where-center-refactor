@@ -11,15 +11,15 @@ export const BREAKPOINT = {
 } as const;
 
 export const GAP = {
-  sm: '1.6rem',
-  md: '3.2rem',
-  lg: '5.6rem',
+  sm: '16px',
+  md: '32px',
+  lg: '56px',
 } as const;
 
 export const BORDER_RADIUS = {
-  sm: '0.8rem',
-  md: '1.2rem',
-  lg: '2.8rem',
+  sm: '8px',
+  md: '12px',
+  lg: '28px',
 } as const;
 
 export const COLOR = {
