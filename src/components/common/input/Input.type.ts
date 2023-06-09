@@ -9,7 +9,7 @@ export interface InputProps {
   onClick?: (e: MouseEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
-  InputRef?: RefObject<HTMLInputElement>;
+  InputRef?: RefObject<HTMLInputElement> | ((el: HTMLInputElement) => HTMLInputElement);
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;

@@ -1,26 +1,35 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import { COLOR } from '../../constants/styles.constant';
 import useInput from '../../hooks/useInput';
+import { useInputValidation } from '../../hooks/useInputValidation';
 import { useModal } from '../../hooks/useModal';
 import usePostCode from '../../hooks/usePostCode';
 import Button from '../common/button/Button';
 import InputGroup from '../common/inputGroup/InputGroup';
 import Modal from '../common/modal/Modal';
 import { PickerFormWrapper } from './PickerForm.styled';
-import { PickerFormValue } from './PickerForm.type';
+import { PickerFormDynamicObject, PickerFormValue } from './PickerForm.type';
 
 const PickerForm = () => {
-  const { value: nameValue, updateValue: updateNameValue } = useInput('');
-  const [isValid, setIsValid] = useState<PickerFormValue<boolean>>({ name: undefined, address: undefined });
+  const { value: nameValue, updateValue: updateNameValue, setValue: setNameValue } = useInput('');
+  const [isValid, setIsValid] = useState<PickerFormValue<boolean>>({
+    name: undefined,
+    address: undefined,
+  });
+  const { valid, onChangeHandler } = useInputValidation({ name: '' });
+  const [pickerList, setPickerList] = useState<PickerFormValue<string>[]>([]);
+
+  const InputRefs = useRef<PickerFormDynamicObject>({});
 
   const { isModalOpen, onToggleModalHandler, toggleButtonRef } = useModal<HTMLInputElement>();
-  const { addrValue, handleComplete } = usePostCode(onToggleModalHandler);
+  const { addrValue, handleComplete, setAddrValue } = usePostCode(onToggleModalHandler);
 
   const checkValid = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setIsValid(prev => ({ ...prev, [name]: value !== '' }));
+    // setIsValid(prev => ({ ...prev, [name]: value !== '' }));
+    onChangeHandler(e);
   };
 
   const nameChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +39,18 @@ const PickerForm = () => {
 
   const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const newId = crypto.randomUUID() as string;
+    const newPicker: PickerFormValue<string> = { id: newId, name: nameValue, address: addrValue };
+
+    setPickerList(prev => [...(prev as PickerFormValue<string>[]), newPicker]);
+    setNameValue('');
+    setAddrValue('');
   };
+
+  useEffect(() => {
+    console.log(pickerList);
+  }, [pickerList]);
 
   return (
     <>
@@ -45,6 +65,7 @@ const PickerForm = () => {
           helpText='이름을 입력해주세요.'
           isValid={isValid.name}
           id='inpName'
+          InputRef={el => (InputRefs.current.name = el)}
         />
         <InputGroup
           type='text'

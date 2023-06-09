@@ -22,7 +22,7 @@ const usePostCode = (completeCallback?: () => void) => {
     completeCallback && completeCallback();
   };
 
-  return { addrValue, handleComplete };
+  return { addrValue, handleComplete, setAddrValue };
 };
 
 export default usePostCode;
