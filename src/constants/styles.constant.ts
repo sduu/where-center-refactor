@@ -27,6 +27,7 @@ export const COLOR = {
   backgroundSection: '#fff',
   textMain: '#111827',
   textSub: '#6b7280',
+  textError: '#e53d3d',
   placeholder: '#adadad',
   border: '#bdbdbd',
   primary: '#30a2ff',
@@ -37,4 +38,4 @@ export const COLOR = {
 
 export const ANIMATION_DURATION = {
   modal: 500,
-};
+} as const;
