@@ -1,21 +1,56 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BORDER_RADIUS, COLOR, FONTSIZE } from '../../../constants/styles.constant';
 import { GAP } from '../../../constants/styles.constant';
+import { InputStyle } from './Input.type';
 
-export const InputWrapper = styled.input`
-  width: 100%;
-  height: 5.4rem;
+export const InputWrapper = styled.div<InputStyle>`
+  display: flex;
+  position: relative;
   border: 1px solid ${COLOR.border};
-  padding: 0 ${GAP.sm};
   border-radius: ${BORDER_RADIUS.md};
-  color: ${COLOR.textMain};
-  font-size: ${FONTSIZE.sm};
+  overflow: hidden;
 
-  ::placeholder {
-    color: ${COLOR.placeholder};
+  ${({ isFocused }) =>
+    isFocused &&
+    css`
+      outline: 1px solid ${COLOR.primary};
+      border-color: transparent;
+    `}
+
+  input {
+    width: 100%;
+    height: 5.4rem;
+    padding: 0 ${GAP.sm};
+    border: none;
+    outline: none;
+    color: ${COLOR.textMain};
+    font-size: ${FONTSIZE.sm};
+
+    ::placeholder {
+      color: ${COLOR.placeholder};
+    }
+
+    :read-only {
+      cursor: pointer;
+    }
   }
 
-  :read-only {
-    cursor: pointer;
+  .side-unit-wrapper {
+    display: flex;
+    align-items: center;
+    gap: ${GAP.sm};
+
+    svg {
+      display: block;
+    }
+
+    & > :last-child {
+      margin-right: ${GAP.sm};
+    }
+
+    .unit {
+      color: ${COLOR.textMain};
+      font-size: ${FONTSIZE.sm};
+    }
   }
 `;

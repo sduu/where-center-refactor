@@ -17,4 +17,10 @@ export interface InputProps {
   readOnly?: boolean;
   min?: number;
   maxLength?: number;
+  unit?: string;
+  isValid?: boolean;
+}
+
+export interface InputStyle {
+  isFocused: boolean;
 }
