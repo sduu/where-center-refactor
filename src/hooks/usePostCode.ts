@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Address } from 'react-daum-postcode';
 
-const usePostCode = (completeCallback?: () => void) => {
+const usePostCode = (completeCallback?: (data: string) => void) => {
   const [addrValue, setAddrValue] = useState('');
 
   const handleComplete = (data: Address) => {
@@ -19,7 +19,7 @@ const usePostCode = (completeCallback?: () => void) => {
     }
 
     setAddrValue(fullAddress);
-    completeCallback && completeCallback();
+    completeCallback && completeCallback(fullAddress);
   };
 
   return { addrValue, handleComplete, setAddrValue };

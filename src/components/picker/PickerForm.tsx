@@ -12,29 +12,24 @@ import { PickerFormWrapper } from './PickerForm.styled';
 import { PickerFormDynamicObject, PickerFormValue } from './PickerForm.type';
 
 const PickerForm = () => {
-  const { value: nameValue, updateValue: updateNameValue, setValue: setNameValue } = useInput('');
-  const [isValid, setIsValid] = useState<PickerFormValue<boolean>>({
-    name: undefined,
-    address: undefined,
-  });
-  const { valid, onChangeHandler } = useInputValidation({ name: '' });
   const [pickerList, setPickerList] = useState<PickerFormValue<string>[]>([]);
 
   const InputRefs = useRef<PickerFormDynamicObject>({});
 
+  const { value: nameValue, updateValue: updateNameValue, setValue: setNameValue } = useInput('');
+  const { valid, checkValidation, resetValidation } = useInputValidation(['name', 'address']);
   const { isModalOpen, onToggleModalHandler, toggleButtonRef } = useModal<HTMLInputElement>();
-  const { addrValue, handleComplete, setAddrValue } = usePostCode(onToggleModalHandler);
-
-  const checkValid = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    // setIsValid(prev => ({ ...prev, [name]: value !== '' }));
-    onChangeHandler(e);
-  };
+  const { addrValue, handleComplete, setAddrValue } = usePostCode((addrValue: string) => {
+    onToggleModalHandler();
+    checkValidation('address', addrValue, true);
+  });
 
   const nameChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const isRequired = e.target.getAttribute('required') !== null;
+
     updateNameValue(e);
-    checkValid(e);
+    checkValidation(name, value, isRequired);
   };
 
   const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -42,15 +37,29 @@ const PickerForm = () => {
 
     const newId = crypto.randomUUID() as string;
     const newPicker: PickerFormValue<string> = { id: newId, name: nameValue, address: addrValue };
+    const _valid = Object.entries(valid);
+
+    for (let i = 0; i < _valid.length; i++) {
+      const [name] = _valid[i];
+
+      if (!valid[name].isValid) {
+        alert(valid[name].errorMessage);
+        InputRefs?.current[name]?.focus();
+        return;
+      }
+    }
 
     setPickerList(prev => [...(prev as PickerFormValue<string>[]), newPicker]);
     setNameValue('');
     setAddrValue('');
+    resetValidation();
+
+    alert('추가완료');
   };
 
   useEffect(() => {
-    console.log(pickerList);
-  }, [pickerList]);
+    InputRefs.current.address = toggleButtonRef.current;
+  }, [toggleButtonRef]);
 
   return (
     <>
@@ -62,10 +71,11 @@ const PickerForm = () => {
           labelText='이름'
           value={nameValue}
           onChange={nameChangeHandler}
-          helpText='이름을 입력해주세요.'
-          isValid={isValid.name}
+          helpText={valid?.name?.errorMessage}
+          isValid={valid?.name?.isValid}
           id='inpName'
           InputRef={el => (InputRefs.current.name = el)}
+          required={true}
         />
         <InputGroup
           type='text'
@@ -74,11 +84,12 @@ const PickerForm = () => {
           placeholder='주소를 검색하세요.'
           readOnly={true}
           onClick={onToggleModalHandler}
-          InputRef={toggleButtonRef}
           labelText='주소'
-          helpText='주소를 입력해주세요.'
-          isValid={isValid.address}
+          helpText={valid?.address?.errorMessage}
+          isValid={valid?.address?.isValid}
           id='inpAddress'
+          InputRef={toggleButtonRef}
+          required={true}
         />
 
         <Button type='submit' size='base' borderColor={COLOR.primary}>

@@ -5,5 +5,5 @@ export interface PickerFormValue<T> {
 }
 
 export interface PickerFormDynamicObject {
-  [key: string]: HTMLInputElement;
+  [key: string]: HTMLInputElement | null;
 }
