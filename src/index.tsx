@@ -9,11 +9,9 @@ import { queryClient } from './utils/queryClient';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <GlobalStyle />
-      <App />
-      <ReactQueryDevtools />
-    </QueryClientProvider>
-  </React.StrictMode>,
+  <QueryClientProvider client={queryClient}>
+    <GlobalStyle />
+    <App />
+    <ReactQueryDevtools />
+  </QueryClientProvider>,
 );
