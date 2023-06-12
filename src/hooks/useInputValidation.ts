@@ -18,9 +18,19 @@ export const useInputValidation = (inputNames: string[]) => {
 
   const [valid, setValid] = useState<Record<string, ValidationState>>(initialState);
 
-  const checkValidation = (name: string, value: string, isRequired: boolean) => {
+  const checkValidation = (name: string, value: string, isRequired: boolean, confirm?: string) => {
     if (!validations[name]) {
       throw new Error('해당 name에 해당하는 유효성 검사 패턴이 존재하지 않습니다.');
+    }
+
+    if (name === 'password') {
+      setValid(prev => ({
+        ...prev,
+        [name + 2]: {
+          isValid: !!validations[name + 2].pattern?.condition(value, confirm),
+          errorMessage: validations[name + 2].pattern?.message || '',
+        },
+      }));
     }
 
     if (!validations[name].required?.condition(value) && isRequired) {
@@ -33,7 +43,7 @@ export const useInputValidation = (inputNames: string[]) => {
       setValid(prev => ({
         ...prev,
         [name]: {
-          isValid: !!validations[name].pattern?.condition(value),
+          isValid: !!validations[name].pattern?.condition(value, confirm),
           errorMessage: validations[name].pattern?.message || '',
         },
       }));

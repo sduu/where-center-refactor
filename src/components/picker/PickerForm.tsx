@@ -57,13 +57,20 @@ const PickerForm = () => {
     alert('추가완료');
   };
 
+  const onInvalidHandler = (e: FormEvent<HTMLFormElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
+    const isRequired = (e.target as HTMLInputElement).getAttribute('required') !== null;
+
+    checkValidation(name, value, isRequired);
+  };
+
   useEffect(() => {
     InputRefs.current.address = toggleButtonRef.current;
   }, [toggleButtonRef]);
 
   return (
     <>
-      <PickerFormWrapper onSubmit={formSubmitHandler}>
+      <PickerFormWrapper onSubmit={formSubmitHandler} onInvalid={onInvalidHandler}>
         <InputGroup
           type='text'
           name='name'

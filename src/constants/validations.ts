@@ -1,5 +1,5 @@
 interface ValidationData {
-  condition: (value: string) => boolean;
+  condition: (value: string, confirm?: string) => boolean;
   message: string;
 }
 
@@ -33,6 +33,22 @@ export const validations: Record<string, ValidationRules> = {
     required: {
       condition: (value: string) => value.length > 0,
       message: '주소를 입력해주세요.',
+    },
+  },
+  password: {
+    required: {
+      condition: (value: string) => value.length > 0,
+      message: '비밀번호를 입력해주세요.',
+    },
+  },
+  password2: {
+    required: {
+      condition: (value: string) => value.length > 0,
+      message: '비밀번호 확인란을 입력해주세요.',
+    },
+    pattern: {
+      condition: (password: string, confirm?: string) => password === confirm,
+      message: '비밀번호가 일치하지 않습니다.',
     },
   },
 };
