@@ -60,9 +60,19 @@ export const useInputValidation = (inputNames: string[]) => {
     }));
   };
 
+  const setValidation = (name: string, isValid: boolean) => {
+    setValid(prev => ({
+      ...prev,
+      [name]: {
+        isValid: isValid,
+        errorMessage: prev[name].errorMessage,
+      },
+    }));
+  };
+
   const resetValidation = () => {
     setValid(initialState);
   };
 
-  return { valid, checkValidation, resetValidation };
+  return { valid, checkValidation, setValidation, resetValidation };
 };

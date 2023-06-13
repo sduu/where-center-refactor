@@ -17,7 +17,7 @@ const PickerForm = () => {
   const InputRefs = useRef<PickerFormDynamicObject>({});
 
   const { value: nameValue, updateValue: updateNameValue, setValue: setNameValue } = useInput('');
-  const { valid, checkValidation, resetValidation } = useInputValidation(['name', 'address']);
+  const { valid, checkValidation, setValidation, resetValidation } = useInputValidation(['name', 'address']);
   const { isModalOpen, onToggleModalHandler, toggleButtonRef } = useModal<HTMLInputElement>();
   const { addrValue, handleComplete, setAddrValue } = usePostCode((addrValue: string) => {
     onToggleModalHandler();
@@ -41,6 +41,10 @@ const PickerForm = () => {
 
     for (let i = 0; i < _valid.length; i++) {
       const [name] = _valid[i];
+
+      if (valid[name].isValid === undefined) {
+        setValidation(name, false);
+      }
 
       if (!valid[name].isValid) {
         alert(valid[name].errorMessage);
