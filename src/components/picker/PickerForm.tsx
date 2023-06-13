@@ -1,6 +1,7 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import { COLOR } from '../../constants/styles.constant';
+import { usePickerContext } from '../../context/pickerContext';
 import useInput from '../../hooks/useInput';
 import { useInputValidation } from '../../hooks/useInputValidation';
 import { useModal } from '../../hooks/useModal';
@@ -12,7 +13,7 @@ import { PickerFormWrapper } from './PickerForm.styled';
 import { PickerFormDynamicObject, PickerFormValue } from './PickerForm.type';
 
 const PickerForm = () => {
-  const [pickerList, setPickerList] = useState<PickerFormValue<string>[]>([]);
+  const { pickerList, addPicker } = usePickerContext();
 
   const InputRefs = useRef<PickerFormDynamicObject>({});
 
@@ -53,7 +54,7 @@ const PickerForm = () => {
       }
     }
 
-    setPickerList(prev => [...(prev as PickerFormValue<string>[]), newPicker]);
+    addPicker(newPicker);
     setNameValue('');
     setAddrValue('');
     resetValidation();
@@ -71,7 +72,6 @@ const PickerForm = () => {
   useEffect(() => {
     InputRefs.current.address = toggleButtonRef.current;
   }, [toggleButtonRef]);
-
   return (
     <>
       <PickerFormWrapper onSubmit={formSubmitHandler} onInvalid={onInvalidHandler}>
