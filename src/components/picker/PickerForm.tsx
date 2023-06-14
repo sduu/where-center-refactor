@@ -6,6 +6,7 @@ import useInput from '../../hooks/useInput';
 import { useInputValidation } from '../../hooks/useInputValidation';
 import { useModal } from '../../hooks/useModal';
 import usePostCode from '../../hooks/usePostCode';
+import { getAddress } from '../../utils/getAddress';
 import Button from '../common/button/Button';
 import InputGroup from '../common/inputGroup/InputGroup';
 import Modal from '../common/modal/Modal';
@@ -33,11 +34,18 @@ const PickerForm = () => {
     checkValidation(name, value, isRequired);
   };
 
-  const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const formSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newId = crypto.randomUUID() as string;
-    const newPicker: PickerFormValue<string> = { id: newId, name: nameValue, address: addrValue };
+    const coordinate = await getAddress(addrValue);
+    const newPicker: PickerFormValue<string> = {
+      id: newId,
+      name: nameValue,
+      address: addrValue,
+      coordinate,
+    };
+
     const _valid = Object.entries(valid);
 
     for (let i = 0; i < _valid.length; i++) {
@@ -58,8 +66,6 @@ const PickerForm = () => {
     setNameValue('');
     setAddrValue('');
     resetValidation();
-
-    alert('추가완료');
   };
 
   const onInvalidHandler = (e: FormEvent<HTMLFormElement>) => {
