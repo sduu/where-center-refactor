@@ -1,7 +1,12 @@
 import React from 'react';
+import Maps from '../../components/map/Maps';
 
 const MapPage = () => {
-  return <div>MapPage</div>;
+  return (
+    <div>
+      <Maps />
+    </div>
+  );
 };
 
 export default MapPage;
