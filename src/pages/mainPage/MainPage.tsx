@@ -1,10 +1,10 @@
 import React from 'react';
-import PickerForm from '../../components/picker/PickerForm';
+import Picker from '../../components/picker/Picker';
 
 const MainPage = () => {
   return (
     <div>
-      <PickerForm />
+      <Picker />
     </div>
   );
 };
