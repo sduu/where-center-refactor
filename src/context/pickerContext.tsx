@@ -6,20 +6,27 @@ interface PickerProviderProps {
   children: ReactNode;
 }
 
-interface ContextType {
+interface ContextStateType {
   pickerList: PickerFormValue<string>[];
-  addPicker: (value: PickerFormValue<string>) => void;
-  deleteTodo: (id: string) => void;
 }
 
-const PickerContext = createContext<ContextType>({} as ContextType);
+interface ContextDispatchType {
+  addPicker: (value: PickerFormValue<string>) => void;
+  deletePicker: (id: string) => void;
+}
+
+const PickerStateContext = createContext<ContextStateType>({} as ContextStateType);
+const PickerDispatchContext = createContext<ContextDispatchType>({} as ContextDispatchType);
 
 export const PickerProvider = ({ children }: PickerProviderProps) => {
-  const { pickerList, addPicker, deleteTodo } = usePicker([]);
+  const { pickerList, addPicker, deletePicker } = usePicker([]);
 
-  const value = { pickerList, addPicker, deleteTodo };
-
-  return <PickerContext.Provider value={value}>{children}</PickerContext.Provider>;
+  return (
+    <PickerStateContext.Provider value={{ pickerList }}>
+      <PickerDispatchContext.Provider value={{ addPicker, deletePicker }}>{children}</PickerDispatchContext.Provider>
+    </PickerStateContext.Provider>
+  );
 };
 
-export const usePickerContext = () => useContext(PickerContext);
+export const usePickerStateContext = () => useContext(PickerStateContext);
+export const usePickerDispatchContext = () => useContext(PickerDispatchContext);

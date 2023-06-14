@@ -34,11 +34,11 @@ const usePicker = (initialState: PickerFormValue<string>[]) => {
     dispatch({ type: 'ADD', value });
   };
 
-  const deleteTodo = (id: string) => {
+  const deletePicker = (id: string) => {
     dispatch({ type: 'DELETE', id });
   };
 
-  return { pickerList, addPicker, deleteTodo };
+  return { pickerList, addPicker, deletePicker };
 };
 
 export default usePicker;
