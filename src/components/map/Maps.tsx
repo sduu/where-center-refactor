@@ -4,6 +4,7 @@ import { usePickerStateContext } from '../../context/pickerContext';
 import findFarthestCoordinate from '../../utils/findFarthestCoordinate';
 import getMidpointCoordinate from '../../utils/getMidPointCoordinate';
 import { MapsWrapper } from './Maps.styled';
+import Marker from './Marker';
 
 const Maps = () => {
   const [longLine, setLongLine] = useState<kakao.maps.Polyline>();
@@ -34,9 +35,7 @@ const Maps = () => {
       <Map center={centerCoordinate} style={{ width: '100%', height: '100%' }} ref={mapRef}>
         {pickerList.map(picker => (
           <Fragment key={picker.id}>
-            <MapMarker position={picker.coordinate}>
-              <div style={{ color: '#000' }}>Hello World!</div>
-            </MapMarker>
+            <Marker position={picker.coordinate} name={picker?.name || ''} />
 
             <Polyline
               path={[[picker.coordinate, centerCoordinate]]}
