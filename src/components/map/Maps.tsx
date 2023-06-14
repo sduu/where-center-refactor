@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Circle, Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 import { usePickerStateContext } from '../../context/pickerContext';
 import findFarthestCoordinate from '../../utils/findFarthestCoordinate';
@@ -7,6 +7,7 @@ import { MapsWrapper } from './Maps.styled';
 
 const Maps = () => {
   const [longLine, setLongLine] = useState<kakao.maps.Polyline>();
+  const mapRef = useRef<kakao.maps.Map>(null);
 
   const { pickerList } = usePickerStateContext();
 
@@ -14,17 +15,30 @@ const Maps = () => {
   const centerCoordinate = getMidpointCoordinate(coordinates);
   const farthestCoordinate = findFarthestCoordinate(centerCoordinate, coordinates);
 
+  const bounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    coordinates.forEach(point => {
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+
+    return bounds;
+  }, [coordinates]);
+
+  useEffect(() => {
+    mapRef?.current?.setBounds(bounds);
+  }, [bounds]);
+
   return (
     <MapsWrapper>
-      <Map center={centerCoordinate} style={{ width: '100%', height: '100%' }}>
+      <Map center={centerCoordinate} style={{ width: '100%', height: '100%' }} ref={mapRef}>
         {pickerList.map(picker => (
-          <>
-            <MapMarker key={picker.id + '_marker'} position={picker.coordinate}>
+          <Fragment key={picker.id}>
+            <MapMarker position={picker.coordinate}>
               <div style={{ color: '#000' }}>Hello World!</div>
             </MapMarker>
 
             <Polyline
-              key={picker.id + '_poly'}
               path={[[picker.coordinate, centerCoordinate]]}
               strokeWeight={3}
               strokeColor='#FFAE00'
@@ -34,7 +48,7 @@ const Maps = () => {
                 picker.coordinate === farthestCoordinate && setLongLine(el);
               }}
             />
-          </>
+          </Fragment>
         ))}
 
         <Circle
